@@ -1,0 +1,74 @@
+---
+title: "R Profiler"
+output:
+  html_document:
+    df_print: paged
+---
+
+
+
+```{r}
+plot(cars)
+```
+
+# Tools for R Profiler
+##Profiling
+
+## Is your code running slowly?
+    
+### First you should think about, is how to get your code to run and make it readble
+
+#### - Design first, then optimize
+#### - Remember: Premature optimization is the root of all evil.
+#### - Measure (collect data), don guess.
+#### - If you're going to be a scientist you need to apply the same principles here!
+
+system.time()
+
+##### Computes the time in seconds needed to execute an expression
+
+######      - If there's an error, gives time until the error occurred
+
+##### Returns an object of class proc_time
+
+###### - user time: time charged to the CPU(s) for this expression
+###### - elapsed time: "Wall clock" time
+
+Elapsed time may be smaller than user time if the machine has multi processors/cores
+Elapsed time may be greater than user time if the CPU spends a lot of time waiting arround
+
+
+Multi-threaded  BLAS libraries take advantage of multi core processors
+
+Parallel processing via the parallel package, use multi computers, or something like computer clusters.
+
+Example:
+
+```{r}
+system.time(readLines("http://www.jhsph.edu"))
+
+hilbert <- function(n){
+    
+    i <- 1:n
+    1/outer(i-1, i, "+")
+}
+
+x <- hilbert(1000)
+system.time(svd(x))
+
+
+```
+
+
+The Rprof function starts the profiler in R
+ - R must be compiled with profiler support
+The summaryRprof() function summarizes the output from Rprof() (otherwise itś not readble)
+DO NOT use system.time() and Rprof() fucntions together... or sad you will be... kkk
+
+
+
+
+
+
+
+
