@@ -1,6 +1,7 @@
 ---
 title: "Week 1: Background, Getting Started, and Nuts & Bolts"
 output: github_document
+
 ---
 
 ```{r setup, include=FALSE}
@@ -23,8 +24,8 @@ summary(cars)
 
 You can also embed plots, for example:
 
-```{r pressure, echo=FALSE}
+```{r pressure}
 plot(pressure)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
