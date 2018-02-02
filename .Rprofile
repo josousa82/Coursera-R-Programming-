@@ -1,5 +1,5 @@
 .First <- function(){
-libList <- c( "downloader", "plyr", "dplyr", "tidyr", "testthat", "ggplot2", "assertthat", "knitr", "rmarkdown", "stringr", "swirl")
+libList <- c( "rlang", "downloader", "plyr", "dplyr", "tidyr", "testthat", "ggplot2", "assertthat", "knitr", "rmarkdown", "stringr", "swirl")
 
 lapply(libList, require, character.only = TRUE)
 

@@ -1,3 +1,12 @@
+if(outcome2 == "heart attack"){
+  
+  outcome2 <- c(".Mortality.H.Attack")
+  
+}else if(outcome2 == "heart failure" ){
+  
+  outcome2 <- (".Mortality.H.Failure")
+  
+}else if( outcome2 == "pneumonia"){ outcome2 <- c(".Mortality.Pneumonia")}
 
 ## removing columms
 cleanHospitalData <- hospitalData[, -grep(paste("Address.2", "Address.3", sep = "|"), names(hospitalData))]
@@ -45,7 +54,16 @@ cleanOutcome %>%
     des
 
 
+testC <- cleanOutcome %>%
+       na.omit()%>%
+       select(.Hospital, .St, .Mortality.Pneumonia)%>%
+       arrange(-desc(.Mortality.Pneumonia))
 
+
+testC <- cleanOutcome %>%
+      na.omit()%>%
+      select(.Hospital, .St, argT)%>%
+      arrange(-desc(3))
   
   
 a[order(a$.Mortality.H.Attack),]
