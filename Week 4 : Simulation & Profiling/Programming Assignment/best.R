@@ -6,7 +6,7 @@ best <- function(state, outcome2 = c("heart failure", "heart attack", "pneumonia
   ##lev <- c("heart failure", "heart attack", "pneumonia")
    outcome2 <- tryCatch(match.arg(outcome2), 
                         error = function(e) {
-                          print(paste0("Error in best(", state, ", ", outcome2,") : invalid outcome\n"))
+                          print(paste0("Error in best(", state, ", ", outcome2,") : invalid outcome"))
                           stop(e)
                           } 
                         ) 
@@ -20,11 +20,11 @@ best <- function(state, outcome2 = c("heart failure", "heart attack", "pneumonia
     out.sym <- sym(outcome2)
 
     final.df <- cleanOutcome %>%
-                na.omit()%>%
                 select(.Hospital, .St, outcome2)%>%
+                na.omit(outcome2)%>%
                 arrange(-desc(UQ(out.sym)))
     
-    head(final.df[1, ".Hospital"])
+    head(final.df[1, ])
     
 }
 
