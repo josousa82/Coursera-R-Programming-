@@ -4,10 +4,13 @@ require(rlang)
 best <- function(state, outcome2 = c("heart failure", "heart attack", "pneumonia")){
     
   ##lev <- c("heart failure", "heart attack", "pneumonia")
+    
    outcome2 <- tryCatch(match.arg(outcome2), 
                         error = function(e) {
+                        
                           print(paste0("Error in best(", state, ", ", outcome2,") : invalid outcome"))
-                          stop(e)
+                         ## return(paste0("Error in best(", quo(state), ", ", quo(outcome2),") : invalid outcome"))
+                        stop(e)
                           } 
                         ) 
     
@@ -24,7 +27,9 @@ best <- function(state, outcome2 = c("heart failure", "heart attack", "pneumonia
                 na.omit(outcome2)%>%
                 arrange(-desc(UQ(out.sym)))
     
-    head(final.df[1, ])
+    final.df[1, outcome2]
+    
+    ##test.gat.df.g[test.gat.df.g$.St =="MN",]
     
 }
 

@@ -8,3 +8,5 @@
 ## will return data frame ready 
 ## to work for itch function
 
+
+test.gat.df.g <- gather(test.gat.df, condition, value, .Mortality.H.Attack:.Mortality.Pneumonia, factor_key = TRUE)
