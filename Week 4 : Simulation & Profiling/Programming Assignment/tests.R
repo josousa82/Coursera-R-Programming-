@@ -45,3 +45,17 @@ cleanOutcome %>%
     des
 
 
+
+  
+  
+a[order(a$.Mortality.H.Attack),]
+
+a <- cleanOutcome%>%
+    arrange(desc(.Mortality.H.Attack))%>%
+    select(.Hospital,.St, .Mortality.H.Attack)%>%
+    na.omit(.Mortality.H.Attack)
+
+a[order(a$.Mortality.H.Attack),]
+
+a[order(-a$.Mortality.H.Attack, a$.St),]
+>>>>>>> v1.0
