@@ -1,11 +1,13 @@
 require(dplyr)
 require(rlang)
+source("data.clean.R")
 
 best <- function(state, outcome2 = c("heart failure", "heart attack", "pneumonia")){
     
   ##lev <- c("heart failure", "heart attack", "pneumonia")
+    df.clean <- clean.best("Data", "outcome-of-care-measures.csv")
     
-   outcome2 <- tryCatch(match.arg(outcome2), 
+    outcome2 <- tryCatch(match.arg(outcome2), 
                         error = function(e) {
                         
                           print(paste0("Error in best(", state, ", ", outcome2,") : invalid outcome"))
@@ -22,10 +24,11 @@ best <- function(state, outcome2 = c("heart failure", "heart attack", "pneumonia
    
     out.sym <- sym(outcome2)
 
-    final.df <- cleanOutcome %>%
-                select(.Hospital, .St, outcome2)%>%
-                na.omit(outcome2)%>%
+    final.df <- df.clean %>%
                 arrange(-desc(UQ(out.sym)))
+    
+    df.clean[df.clean$.St == "TX" & condition == ".Mortality.H.Attack",  ]%>%
+    arrange(-desc(rate))%>%
     
     final.df[1, outcome2]
     

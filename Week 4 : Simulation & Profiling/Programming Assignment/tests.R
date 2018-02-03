@@ -24,7 +24,10 @@ colnames(cleanOutcome) <- c(".Hospital", ".City",  ".St", ".County", ".Mortality
                             ".Mortality.H.Failure", ".Mortality.Pneumonia", ".Read.H.Attack", 
                             ".Read.H.Failure", ".Read.Pneumonia" )
 
-
+sub.df.final %>%
+    na.omit()%>%
+    arrange(-desc(rate))%>%
+    head(sub.df.final[condition == 1, ])
 
 
 ## getting NA's
@@ -76,4 +79,5 @@ a <- cleanOutcome%>%
 a[order(a$.Mortality.H.Attack),]
 
 a[order(-a$.Mortality.H.Attack, a$.St),]
->>>>>>> v1.0
+ 
+v1.0
