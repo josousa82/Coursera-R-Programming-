@@ -11,7 +11,7 @@
 read.dataset <- function(directory = c("Data"), file){
   
      path.to.file <- file.path(directory, file)
-     dataset <- read.csv(path.to.file)
+     dataset <- read.csv(path.to.file, colClasses = "character")
      dataset 
 }
 
@@ -43,7 +43,7 @@ df.final <- df.final %>%
                                    .St = as.factor(.St)) %>%
             gather(condition, rate, .Mortality.H.Attack:.Mortality.Pneumonia)%>%
             na.omit()
-
+detach(dataset.b)
 df.final
 }
 
