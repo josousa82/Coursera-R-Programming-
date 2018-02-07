@@ -16,44 +16,50 @@ read.dataset <- function(directory = c("Data"), file){
 }
 
 
-##best function
-clean.best <- function(path = as.character(), filecsv= as.character()){
+    ## Dataset cleaning for best function
+clean.best <- function(path, filecsv){
+    
+    ## call function that reads the csv file
     
 dataset.b <- read.dataset(path, filecsv)
- 
+
+    ## col names rename vector
 colnames.df <- c(".Hospital", ".St", ".Mortality.H.Attack", 
                 ".Mortality.H.Failure", ".Mortality.Pneumonia")
+
+
+    ## col to select from the data frame for function best.R
 
 names.hosp.30day.state <- c("Hospital.Name", "State", 
                             "Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack", 
                             "Hospital.30.Day.Death..Mortality..Rates.from.Heart.Failure", 
                             "Hospital.30.Day.Death..Mortality..Rates.from.Pneumonia"
                             )
+
+    ## attach dataset to R search path
 attach(dataset.b)
 
+    ## select col for final df for function best
+
 df.final <- dataset.b %>% select(names.hosp.30day.state)
+    
+    ## rename col names in final data frame
 
 colnames(df.final) <- c(".Hospital", ".St", ".Mortality.H.Attack", 
                        ".Mortality.H.Failure", ".Mortality.Pneumonia")
 
-df.final <- df.final %>% 
+    
+suppressWarnings(df.final <- df.final %>% 
             transform(.Mortality.H.Attack = as.numeric(.Mortality.H.Attack),
                                    .Mortality.H.Failure = as.numeric(.Mortality.H.Failure), 
                                    .Mortality.Pneumonia = as.numeric(.Mortality.Pneumonia), 
                                    .St = as.factor(.St)) %>%
             gather(condition, rate, .Mortality.H.Attack:.Mortality.Pneumonia)%>%
-            na.omit()
+            na.omit())
 detach(dataset.b)
+
+)
 df.final
 }
 
 
-##sub.df.final <- subset(x = df.final, subset = .St == "TX")
-
-##test.gat.df.g <- gather(test.gat.df, condition, value, .Mortality.H.Attack:.Mortality.Pneumonia, factor_key = TRUE)
-##test.gat.df.g <- transform(test.gat.df.g, .St = as.factor(.St))
-##vect.states <- levels(factor(test.gat.df.g$.St))
-
-## df.clean[df.clean$.St == "TX" & condition == ".Mortality.H.Attack",  ]%>%
-## arrange(-desc(rate))%>%
-## head()

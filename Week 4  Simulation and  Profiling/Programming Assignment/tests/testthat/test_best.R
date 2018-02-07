@@ -8,5 +8,6 @@ expect_that(best("TX", "heart attack"), equals("CYPRESS FAIRBANKS MEDICAL CENTER
 expect_that(best("MD", "heart attack"), equals("JOHNS HOPKINS HOSPITAL, THE"))
 expect_that(best("TX", "heart failure"), equals("FORT DUNCAN MEDICAL CENTER"))
 
+
 })
 
