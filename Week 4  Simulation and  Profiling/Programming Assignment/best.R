@@ -29,8 +29,5 @@ best <- function(state, outcome2 = c("heart failure", "heart attack", "pneumonia
     
    result <- f.df[f.df$.St == state & f.df$condition == outcome2, ]
    
-   result[1, 1]
-    
+   result[1,1]    
 }
-
-
