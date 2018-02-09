@@ -80,11 +80,14 @@ best <- function(state, outcome){
                                                    .Mortality.H.Failure = "heart failure",
                                                    .Mortality.Pneumonia = "pneumonia"))
     
-    df.final <- arrange(df.final, -desc(rate))
+    df.final <- df.final %>% arrange(-desc(rate))
+   
     ## FINISH data clean
                          
     # detach(df.final)
+   
      df.final[df.final$.St == state & df.final$condition == outcome, ][1,1]
+     head(df.final)
      
  
 }
