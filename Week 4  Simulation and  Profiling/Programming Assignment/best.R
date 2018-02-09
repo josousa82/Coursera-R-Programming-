@@ -10,34 +10,37 @@ best <- function(state, outcome){
                       "MS", "MT","NC", "ND", "NE", "NH", "NJ", "NM","NV", "NY", "OH", "OK", "OR", 
                       "PA", "PR", "RI", "SC", "SD", "TN", "TX", "UT", "VA","VI", "VT", "WA", "WI", "WV", "WY")
     
-    # out <- tryCatch(
-    #     {
-    #         outcome <- match.arg(outcome, cond, several.ok = TRUE)
-    #         return(NA)
-    #     },     
-    #     error = function(e) {
-    #         message(sprintf("Error in best(\"%s\", \"%s\") : invalid outcome\n", state, outcome))
-    #     }
-    # )
-    # 
-    # out <- tryCatch(
-    #     {
-    #         state <- match.arg(state, state.check, several.ok = TRUE)
-    #     },
-    #     
-    #     error = function(e){
-    #         message(sprintf("Error in best(%s, %s) : invalid state", state, outcome))
-    #         return(NA)
-    #     }
-    #     
-    # )
+    tryCatch(
+        {
+            outcome <- match.arg(outcome, cond, several.ok = TRUE)
+            
+        },
+        error = function(e) {
+            message(sprintf("Error in best(\"%s\", \"%s\") : invalid outcome\n", state, outcome))
+            
+        }
+    )
+
+     tryCatch(
+        {
+            state <- match.arg(state, state.check, several.ok = TRUE)
+            print("state =" + state)
+        },
+
+        error = function(e){
+            message(sprintf("Error in best(%s, %s) : invalid state", state, outcome))
+            
+        }
+
+    )
     ## change name var outcome to desired string 
     
-    switch (outcome,
-            "heart failure" = outcome <- c(".Mortality.H.Failure"),
-            "heart attack" = outcome <- c(".Mortality.H.Attack"),
-            "pneumonia" = outcome <- c(".Mortality.Pneumonia")
-    )
+    # switch (outcome,
+    #         "heart failure" = outcome <- c(".Mortality.H.Failure"),
+    #         "heart attack" = outcome <- c(".Mortality.H.Attack"),
+    #         "pneumonia" = outcome <- c(".Mortality.Pneumonia")
+    # )
+    
     
     ## read csv file
     
@@ -74,20 +77,24 @@ best <- function(state, outcome){
                                    .Mortality.Pneumonia = as.numeric(.Mortality.Pneumonia), 
                                    .St = as.factor(.St))%>%
                          gather(condition, rate, .Mortality.H.Attack:.Mortality.Pneumonia)%>%
-                         na.omit())%>%
-                         mutate(condition = recode(condition,
-                                                   .Mortality.H.Attack = "heart attack",
-                                                   .Mortality.H.Failure = "heart failure",
-                                                   .Mortality.Pneumonia = "pneumonia"))
+                         plyr::mutate(condition = recode(condition,
+                                                  .Mortality.H.Attack = "heart attack",
+                                                  .Mortality.H.Failure = "heart failure",
+                                                  .Mortality.Pneumonia = "pneumonia"))%>%
+                         arrange(-dplyr::desc(rate)) %>%
+                         na.omit())
+                         
     
-    df.final <- df.final %>% arrange(-desc(rate))
+    
+    # df.final <- na.omit(df.final)
    
     ## FINISH data clean
                          
     # detach(df.final)
-   
-     df.final[df.final$.St == state & df.final$condition == outcome, ][1,1]
-     head(df.final)
+    
+  df.final[df.final$.St == state & df.final$condition == outcome, ][1,1]
+     
+    #detach(df.final) 
      
  
 }

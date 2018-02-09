@@ -17,7 +17,7 @@ read.dataset <- function(directory = c("Data"), file){
 
 
     ## Dataset cleaning for best function
-clean.best <- function(path, filecsv){
+clean.best <- function(path, filecsv, tf = as.character()){
     
     ## call function that reads the csv file
     
@@ -56,10 +56,18 @@ suppressWarnings(df.final <- df.final %>%
                                    .St = as.factor(.St)) %>%
             gather(condition, rate, .Mortality.H.Attack:.Mortality.Pneumonia)%>%
             na.omit())
+
+
+if(tf == "best"){
+    
+     df.final <- dplyr::mutate(df.final, condition =  recode(condition, .Mortality.H.Attack = "heart attack",
+    .Mortality.H.Failure = "heart failure",
+    .Mortality.Pneumonia = "pneumonia"))
+     
+}
 detach(dataset.b)
-
-
 df.final
+
 }
 
 
