@@ -1,23 +1,36 @@
 require(dplyr)
 require(rlang)
-source("data.clean.R")
+#source("data.clean.R")
 
 best <- function(state, outcome){
     
-    lev <- c("heart failure", "heart attack", "pneumonia")
+    cond <- c("heart failure", "heart attack", "pneumonia")
+    state.check <- c( "AK", "AL", "AR", "AZ", "CA", "CO", "CT", "DC", "DE", "FL", "GA", "GU" ,"HI", 
+                      "IA", "ID", "IL", "IN", "KS", "KY", "LA", "MA", "MD", "ME", "MI", "MN", "MO", 
+                      "MS", "MT","NC", "ND", "NE", "NH", "NJ", "NM","NV", "NY", "OH", "OK", "OR", 
+                      "PA", "PR", "RI", "SC", "SD", "TN", "TX", "UT", "VA","VI", "VT", "WA", "WI", "WV", "WY")
     
-    tryCatch(
-        {
-            outcome <- match.arg(outcome, lev, several.ok = TRUE)
-        },     
-        
-        error = function(e) {
-            cat(sprintf("Error in best(\"%s\", \"%s\") : invalid outcome\n", state, outcome))
-        }
-        
-        
-    ) 
-    
+    # out <- tryCatch(
+    #     {
+    #         outcome <- match.arg(outcome, cond, several.ok = TRUE)
+    #         return(NA)
+    #     },     
+    #     error = function(e) {
+    #         message(sprintf("Error in best(\"%s\", \"%s\") : invalid outcome\n", state, outcome))
+    #     }
+    # )
+    # 
+    # out <- tryCatch(
+    #     {
+    #         state <- match.arg(state, state.check, several.ok = TRUE)
+    #     },
+    #     
+    #     error = function(e){
+    #         message(sprintf("Error in best(%s, %s) : invalid state", state, outcome))
+    #         return(NA)
+    #     }
+    #     
+    # )
     ## change name var outcome to desired string 
     
     switch (outcome,
@@ -43,7 +56,7 @@ best <- function(state, outcome){
     )
     
     ## attach dataset to R search path
-   ## attach(df.final)
+   #attach(df.final)
    
     ## select col for final df for function best
     
@@ -61,16 +74,17 @@ best <- function(state, outcome){
                                    .Mortality.Pneumonia = as.numeric(.Mortality.Pneumonia), 
                                    .St = as.factor(.St))%>%
                          gather(condition, rate, .Mortality.H.Attack:.Mortality.Pneumonia)%>%
-                         arrange(-desc(rate))%>%
                          na.omit())%>%
                          mutate(condition = recode(condition,
                                                    .Mortality.H.Attack = "heart attack",
                                                    .Mortality.H.Failure = "heart failure",
                                                    .Mortality.Pneumonia = "pneumonia"))
+    
+    df.final <- arrange(df.final, -desc(rate))
     ## FINISH data clean
                          
-     ## detach(df.final)
+    # detach(df.final)
      df.final[df.final$.St == state & df.final$condition == outcome, ][1,1]
-    
+     
  
 }
