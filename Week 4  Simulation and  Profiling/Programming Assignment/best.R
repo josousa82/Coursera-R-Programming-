@@ -34,14 +34,6 @@ best <- function(state, outcome){
         }
     
     )
-    ## change name var outcome to desired string
-
-    # switch (outcome,
-    #         "heart failure" = outcome <- c(".Mortality.H.Failure"),
-    #         "heart attack" = outcome <- c(".Mortality.H.Attack"),
-    #         "pneumonia" = outcome <- c(".Mortality.Pneumonia")
-    # )
-    
     
     ## read csv file
     
@@ -59,11 +51,6 @@ best <- function(state, outcome){
                                 "Hospital.30.Day.Death..Mortality..Rates.from.Pneumonia"
     )
     
-    ## attach dataset to R search path
-   #attach(df.final)
-   
-    ## select col for final df for function best
-    
     df.final <- df.final %>% select(names.hosp.30day.state)
     
     
@@ -71,8 +58,18 @@ best <- function(state, outcome){
     
     colnames(df.final) <- c(".Hospital", ".St", ".Mortality.H.Attack", 
                             ".Mortality.H.Failure", ".Mortality.Pneumonia")
+    ## suppress warnings of NA's coersion
     
-    suppressWarnings(
+          ## cleaning: 
+                # 1st change class of col's in data frame;
+                # 2nd make the data frame longer with gather
+                #   combine numeric value col's Mortality.H.Attack,
+                #   .Mortality.H.Failure, .Mortality.Pneumonia in 
+                #   condition col, and values in rate col;
+                # 3rd use of mutate to change the names in the
+                
+        suppressWarnings(
+        
         df.final <- df.final%>% 
                          transform(.Mortality.H.Attack = as.numeric(.Mortality.H.Attack),
                                    .Mortality.H.Failure = as.numeric(.Mortality.H.Failure), 
@@ -86,9 +83,9 @@ best <- function(state, outcome){
                         arrange(-dplyr::desc(rate)))
                        
    df.t <- df.final%>% dplyr::filter(df.final[[".St"]] == state 
-                                     & df.final[["condition"]] == outcome  
-                                     , !is.na(df.final[["rate"]]))
-  
+                                     & df.final[["condition"]] == outcome, 
+                                     !is.na(df.final[["rate"]]))
+  ## Finish cleaning
    tt <- as.list(table(df.t$rate))
    
    fval <- as.character(df.t[1, 4])
@@ -96,33 +93,12 @@ best <- function(state, outcome){
    if(tt[fval] > 1){
        
        tax <- df.t[df.t$rate == fval, ]
-       tax %>% arrange(-dplyr::desc(tax[[".Hospital"]]))
-       return(tax[1,1])
+       ## tax <- tax %>% arrange(-dplyr::desc(tax[[".Hospital"]]))
+       tax <- sort()
+       return(sort(tax[,1])[1])
        
    }else{
        
         df.t[1,1]
    }
-   
-    
-   
-  
-        
-    
-    # print(head(df.t))
-    # 
-    # print(tail(df.t))
-    # print(summary(df.t))
-    # 
-    # df.final <- na.omit(df.final)
-   
-    ## FINISH data clean
-                         
-    # detach(df.final)
-    
-  ##df.final[df.final$.St == state & df.final$condition == outcome, ][1,1]
-     
-    #detach(df.final) 
-     
- 
 }
