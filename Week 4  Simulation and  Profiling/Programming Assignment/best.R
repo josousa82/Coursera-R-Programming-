@@ -96,9 +96,11 @@ best <- function(state, outcome){
        ## tax <- tax %>% arrange(-dplyr::desc(tax[[".Hospital"]]))
        tax <- sort()
        return(sort(tax[,1])[1])
-       
+       # return(head(sort(tax[,1])))
    }else{
        
         df.t[1,1]
+       
+       # head(df.t)
    }
 }
