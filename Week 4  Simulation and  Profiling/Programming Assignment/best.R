@@ -84,11 +84,29 @@ best <- function(state, outcome){
                                                   .Mortality.H.Failure = "heart failure",
                                                   .Mortality.Pneumonia = "pneumonia"))%>%
                         arrange(-dplyr::desc(rate)))
-                        ## na.omit())
-    
+                       
    df.t <- df.final%>% dplyr::filter(df.final[[".St"]] == state 
                                      & df.final[["condition"]] == outcome  
                                      , !is.na(df.final[["rate"]]))
+  
+   tt <- as.list(table(df.t$rate))
+   
+   fval <- as.character(df.t[1, 4])
+   
+   if(tt[fval] > 1){
+       
+       tax <- df.t[df.t$rate == fval, ]
+       tax %>% arrange(-dplyr::desc(tax[[".Hospital"]]))
+       return(tax[1,1])
+       
+   }else{
+       
+        df.t[1,1]
+   }
+   
+    
+   
+  
         
     
     # print(head(df.t))
@@ -101,7 +119,7 @@ best <- function(state, outcome){
     ## FINISH data clean
                          
     # detach(df.final)
-    df.t[1,1]
+    
   ##df.final[df.final$.St == state & df.final$condition == outcome, ][1,1]
      
     #detach(df.final) 
