@@ -1,24 +1,23 @@
-require(readr)
-require(tibble)
-require(dlpyr)
-require(tidyr)
-
-cache <- function(){
-    ## function where the data frame will be cached,
+cache.df <- function(x = data.frame()){
     
-    get.df <- function(){
-        
+    clean.df <- NULL
+    
+    set <- function(df){
+        x <<- df
+        clean.df <<- NULL
     }
     
-    set.df <- function(){
-        
+    get <- function() x
+    
+    set.df <- function(cldf){
+        clean.df <<- cldf
     }
     
-    get.df.names <- function(){
-        
-    }
+    get.df <- function() clean.df
     
+    list(set = set, get = get, set.df = set.df, get.df = get.df)
 }
+
 
 clean.data <- function(){
     ## check if there is a cached data frame
@@ -33,14 +32,7 @@ clean.data <- function(){
     ## cache the data frame
 }
 
-best <- function(state, outcome){
-    
-    try(match(state, outcome$.State))
-    try(match(outcome, outcome$.Disease))
-    
-    
 
-}
 
 
 

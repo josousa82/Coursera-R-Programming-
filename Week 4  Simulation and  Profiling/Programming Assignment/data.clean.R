@@ -8,12 +8,7 @@
 ## will return data frame ready 
 ## to work for itch function
 
-read.dataset <- function(directory = c("Data"), file){
-  
-     path.to.file <- file.path(directory, file)
-     dataset <- read.csv(path.to.file, colClasses = "character")
-     dataset 
-}
+
 
 
     ## Dataset cleaning for best function
