@@ -1,4 +1,4 @@
-cache.df <- function(x = data.frame()){
+cache.df <- function(x = as.data.frame()){
     
     clean.df <- NULL
     

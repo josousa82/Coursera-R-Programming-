@@ -8,18 +8,16 @@
 ## will return data frame ready 
 ## to work for itch function
 
-
-
-
 ## Dataset cleaning for best function
 clean.best <- function(path , filecsv, tf = as.character(), ch.df, ...){
     
     
-    cleandf <- ch.df$get.df
+    cleandf <- ch.df$get.df()
     
-    if(!is.null(cleandf)) 
+    if(!is.null(cleandf)){
         message("Getting Data")
         return(cleandf)
+    }else{
     ## call function that reads the csv file
     
     dataset.b <- read.dataset(path, filecsv)
@@ -67,6 +65,8 @@ clean.best <- function(path , filecsv, tf = as.character(), ch.df, ...){
         
     }
     detach(dataset.b)
-    df.final
+    ch.df$set.df(df.final)
     
+    return(df.final)
+    }
 }
