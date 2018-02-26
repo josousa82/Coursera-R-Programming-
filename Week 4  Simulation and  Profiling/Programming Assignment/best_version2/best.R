@@ -38,20 +38,20 @@ best <- function(state, outcome){
     ## read csv file
     
     filePath <- file.path("Data", "outcome-of-care-measures.csv")
-    df.final <- read.csv(filePath, colClasses = "character")
+    df.final <- clean.best("Data", "outcome-of-care-measures.csv", "best")
     
     ## clean outcome data frame, for best function
     ## START CLEAN
-    colnames.df <- c(".Hospital", ".St", ".Mortality.H.Attack", 
-                     ".Mortality.H.Failure", ".Mortality.Pneumonia")
+    # colnames.df <- c(".Hospital", ".St", ".Mortality.H.Attack", 
+    #                  ".Mortality.H.Failure", ".Mortality.Pneumonia")
+    # 
+    # names.hosp.30day.state <- c("Hospital.Name", "State", 
+    #                             "Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack", 
+    #                             "Hospital.30.Day.Death..Mortality..Rates.from.Heart.Failure", 
+    #                             "Hospital.30.Day.Death..Mortality..Rates.from.Pneumonia"
+    # )
     
-    names.hosp.30day.state <- c("Hospital.Name", "State", 
-                                "Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack", 
-                                "Hospital.30.Day.Death..Mortality..Rates.from.Heart.Failure", 
-                                "Hospital.30.Day.Death..Mortality..Rates.from.Pneumonia"
-    )
-    
-    df.final <- df.final %>% select(names.hosp.30day.state)
+    # df.final <- df.final %>% select(names.hosp.30day.state)
     
     
     ## rename col names in final data frame
@@ -68,19 +68,19 @@ best <- function(state, outcome){
     #   condition col, and values in rate col;
     # 3rd use of mutate to change the names in the
     
-    suppressWarnings(
-        
-        df.final <- df.final%>% 
-            transform(.Mortality.H.Attack = as.numeric(.Mortality.H.Attack),
-                      .Mortality.H.Failure = as.numeric(.Mortality.H.Failure), 
-                      .Mortality.Pneumonia = as.numeric(.Mortality.Pneumonia), 
-                      .St = as.factor(.St))%>%
-            gather(condition, rate, .Mortality.H.Attack:.Mortality.Pneumonia)%>%
-            dplyr::mutate(condition = recode(condition,
-                                             .Mortality.H.Attack = "heart attack",
-                                             .Mortality.H.Failure = "heart failure",
-                                             .Mortality.Pneumonia = "pneumonia"))%>%
-            arrange(-dplyr::desc(rate)))
+    # suppressWarnings(
+    #     
+    #     df.final <- df.final%>% 
+    #         transform(.Mortality.H.Attack = as.numeric(.Mortality.H.Attack),
+    #                   .Mortality.H.Failure = as.numeric(.Mortality.H.Failure), 
+    #                   .Mortality.Pneumonia = as.numeric(.Mortality.Pneumonia), 
+    #                   .St = as.factor(.St))%>%
+    #         gather(condition, rate, .Mortality.H.Attack:.Mortality.Pneumonia)%>%
+    #         dplyr::mutate(condition = recode(condition,
+    #                                          .Mortality.H.Attack = "heart attack",
+    #                                          .Mortality.H.Failure = "heart failure",
+    #                                          .Mortality.Pneumonia = "pneumonia"))%>%
+    #         arrange(-dplyr::desc(rate)))
     
     df.t <- df.final%>% dplyr::filter(df.final[[".St"]] == state 
                                       & df.final[["condition"]] == outcome, 

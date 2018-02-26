@@ -8,10 +8,13 @@
 ## will return data frame ready 
 ## to work for itch function
 
+lsource <- c("cachedf.R", "readDataset.R")
+lapply(lsource, source)
+
 ## Dataset cleaning for best function
-clean.best <- function(path , filecsv, tf = as.character(), ch.df, ...){
+clean.best <- function(path , filecsv, tf = as.character()){
     
-    
+    ch.df <<- cache.df() 
     cleandf <- ch.df$get.df()
     
     if(!is.null(cleandf)){
@@ -21,6 +24,8 @@ clean.best <- function(path , filecsv, tf = as.character(), ch.df, ...){
     ## call function that reads the csv file
     
     dataset.b <- read.dataset(path, filecsv)
+    
+    ch.df$set(dataset.b)
     
     ## col names rename vector
     colnames.df <- c(".Hospital", ".St", ".Mortality.H.Attack", 
@@ -48,20 +53,36 @@ clean.best <- function(path , filecsv, tf = as.character(), ch.df, ...){
                             ".Mortality.H.Failure", ".Mortality.Pneumonia")
     
     
-    suppressWarnings(df.final <- df.final %>% 
-                         transform(.Mortality.H.Attack = as.numeric(.Mortality.H.Attack),
-                                   .Mortality.H.Failure = as.numeric(.Mortality.H.Failure), 
-                                   .Mortality.Pneumonia = as.numeric(.Mortality.Pneumonia), 
-                                   .St = as.factor(.St)) %>%
-                         gather(condition, rate, .Mortality.H.Attack:.Mortality.Pneumonia)%>%
-                         na.omit())
+    # suppressWarnings(df.final <- df.final %>% 
+    #                      transform(.Mortality.H.Attack = as.numeric(.Mortality.H.Attack),
+    #                                .Mortality.H.Failure = as.numeric(.Mortality.H.Failure), 
+    #                                .Mortality.Pneumonia = as.numeric(.Mortality.Pneumonia), 
+    #                                .St = as.factor(.St)
+    #                                ) %>%
+    #                      gather(condition, rate, .Mortality.H.Attack:.Mortality.Pneumonia)%>%
+    #                      na.omit()) 
+    
+    suppressWarnings(
+        
+        df.final <- df.final%>% 
+            transform(.Mortality.H.Attack = as.numeric(.Mortality.H.Attack),
+                      .Mortality.H.Failure = as.numeric(.Mortality.H.Failure), 
+                      .Mortality.Pneumonia = as.numeric(.Mortality.Pneumonia), 
+                      .St = as.factor(.St))%>%
+            gather(condition, rate, .Mortality.H.Attack:.Mortality.Pneumonia)%>%
+            dplyr::mutate(condition = recode(condition,
+                                             .Mortality.H.Attack = "heart attack",
+                                             .Mortality.H.Failure = "heart failure",
+                                             .Mortality.Pneumonia = "pneumonia"))%>%
+            arrange(-dplyr::desc(rate)))
     
     
     if(tf == "best"){
         
         df.final <- dplyr::mutate(df.final, condition =  recode(condition, .Mortality.H.Attack = "heart attack",
                                                                 .Mortality.H.Failure = "heart failure",
-                                                                .Mortality.Pneumonia = "pneumonia"))
+                                                                .Mortality.Pneumonia = "pneumonia")) %>%
+                            transform(condition = as.factor(condition))
         
     }
     detach(dataset.b)
