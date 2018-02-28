@@ -12,10 +12,11 @@ lsource <- c("cachedf.R", "readDataset.R")
 lapply(lsource, source)
 
 ## Dataset cleaning for best function
-clean.best <- function(path , filecsv, tf = as.character()){
+clean.best <- function(path = "Data" , filecsv = "outcome-of-care-measures.csv", tf = as.character()){
     
     ch.df <<- cache.df() 
     cleandf <- ch.df$get.df()
+    
     
     if(!is.null(cleandf)){
         message("Getting Data")
@@ -76,13 +77,14 @@ clean.best <- function(path , filecsv, tf = as.character()){
                                              .Mortality.Pneumonia = "pneumonia"))%>%
             arrange(-dplyr::desc(rate)))
     
-    
+    #### from here define partial cleaning for each of the of the functions
     if(tf == "best"){
         
         df.final <- dplyr::mutate(df.final, condition =  recode(condition, .Mortality.H.Attack = "heart attack",
                                                                 .Mortality.H.Failure = "heart failure",
                                                                 .Mortality.Pneumonia = "pneumonia")) %>%
                             transform(condition = as.factor(condition))
+        ####### 
         
     }
     detach(dataset.b)

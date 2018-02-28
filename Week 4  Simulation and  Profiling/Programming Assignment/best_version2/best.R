@@ -1,14 +1,14 @@
 require(dplyr)
 require(rlang)
-#source("data.clean.R")
+source("data.clean.R")
 
 best <- function(state, outcome){
     
-    cond <- c("heart failure", "heart attack", "pneumonia")
-    state.check <- c( "AK", "AL", "AR", "AZ", "CA", "CO", "CT", "DC", "DE", "FL", "GA", "GU" ,"HI", 
-                      "IA", "ID", "IL", "IN", "KS", "KY", "LA", "MA", "MD", "ME", "MI", "MN", "MO", 
-                      "MS", "MT","NC", "ND", "NE", "NH", "NJ", "NM","NV", "NY", "OH", "OK", "OR", 
-                      "PA", "PR", "RI", "SC", "SD", "TN", "TX", "UT", "VA","VI", "VT", "WA", "WI", "WV", "WY")
+    df.final <- clean.best("Data", "outcome-of-care-measures.csv", "best")
+    
+    
+    cond <- levels(ch.df$get.df()[, 3])
+    state.check <- levels(ch.df$get.df()[, 2])
     
     tryCatch(
         {
@@ -36,51 +36,7 @@ best <- function(state, outcome){
     )
     
     ## read csv file
-    
-    filePath <- file.path("Data", "outcome-of-care-measures.csv")
-    df.final <- clean.best("Data", "outcome-of-care-measures.csv", "best")
-    
-    ## clean outcome data frame, for best function
-    ## START CLEAN
-    # colnames.df <- c(".Hospital", ".St", ".Mortality.H.Attack", 
-    #                  ".Mortality.H.Failure", ".Mortality.Pneumonia")
-    # 
-    # names.hosp.30day.state <- c("Hospital.Name", "State", 
-    #                             "Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack", 
-    #                             "Hospital.30.Day.Death..Mortality..Rates.from.Heart.Failure", 
-    #                             "Hospital.30.Day.Death..Mortality..Rates.from.Pneumonia"
-    # )
-    
-    # df.final <- df.final %>% select(names.hosp.30day.state)
-    
-    
-    ## rename col names in final data frame
-    
-    colnames(df.final) <- c(".Hospital", ".St", ".Mortality.H.Attack", 
-                            ".Mortality.H.Failure", ".Mortality.Pneumonia")
-    ## suppress warnings of NA's coersion
-    
-    ## cleaning: 
-    # 1st change class of col's in data frame;
-    # 2nd make the data frame longer with gather
-    #   combine numeric value col's Mortality.H.Attack,
-    #   .Mortality.H.Failure, .Mortality.Pneumonia in 
-    #   condition col, and values in rate col;
-    # 3rd use of mutate to change the names in the
-    
-    # suppressWarnings(
-    #     
-    #     df.final <- df.final%>% 
-    #         transform(.Mortality.H.Attack = as.numeric(.Mortality.H.Attack),
-    #                   .Mortality.H.Failure = as.numeric(.Mortality.H.Failure), 
-    #                   .Mortality.Pneumonia = as.numeric(.Mortality.Pneumonia), 
-    #                   .St = as.factor(.St))%>%
-    #         gather(condition, rate, .Mortality.H.Attack:.Mortality.Pneumonia)%>%
-    #         dplyr::mutate(condition = recode(condition,
-    #                                          .Mortality.H.Attack = "heart attack",
-    #                                          .Mortality.H.Failure = "heart failure",
-    #                                          .Mortality.Pneumonia = "pneumonia"))%>%
-    #         arrange(-dplyr::desc(rate)))
+     ## df.final <- clean.best("Data", "outcome-of-care-measures.csv", "best")
     
     df.t <- df.final%>% dplyr::filter(df.final[[".St"]] == state 
                                       & df.final[["condition"]] == outcome, 
