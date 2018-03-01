@@ -1,10 +1,11 @@
 require(dplyr)
 require(rlang)
-source("data.clean.R")
 
+lsource <- c("cachedf.R", "readDataset.R", "data.clean.R")
+lapply(lsource, source)
 best <- function(state, outcome){
     
-    df.final <- clean.best("Data", "outcome-of-care-measures.csv", "best")
+    df.final <- clean.best("Data", "outcome-of-care-measures.csv")
     
     
     cond <- levels(ch.df$get.df()[, 3])
@@ -45,22 +46,24 @@ best <- function(state, outcome){
     df.t <- df.final%>% dplyr::filter(df.final[[".St"]] == state 
                                       & df.final[["condition"]] == outcome, 
                                       !is.na(df.final[["rate"]]))
-    ## Finish cleaning
-    tt <- as.list(table(df.t$rate))
-    
-    fval <- as.character(df.t[1, 4])
-    
-    if(tt[fval] > 1){
-        
-        tax <- df.t[df.t$rate == fval, ]
-        ## tax <- tax %>% arrange(-dplyr::desc(tax[[".Hospital"]]))
-        tax <- sort()
-        return(sort(tax[,1])[1])
-        # return(head(sort(tax[,1])))
-    }else{
-        
-        df.t[1,1]
+    # ## Finish cleaning
+    # tt <- as.list(table(df.t$rate))
+    # 
+    # fval <- as.character(df.t[1, 4])
+    # 
+    # if(tt[fval] > 1){
+    #     
+    #     tax <- df.t[df.t$rate == fval, ]
+    #     ## tax <- tax %>% arrange(-dplyr::desc(tax[[".Hospital"]]))
+    #     tax <- sort()
+    #     return(sort(tax[,1])[1])
+    #     # return(head(sort(tax[,1])))
+    # }else{
+    #     
+       df.t <- df.t[order(df.t$rate, df.t$.Hospital), ]
+       
+       df.t[1, 1]
         
         # head(df.t)
-    }
+    # }
 }

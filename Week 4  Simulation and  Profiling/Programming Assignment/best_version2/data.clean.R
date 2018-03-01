@@ -8,13 +8,12 @@
 ## will return data frame ready 
 ## to work for itch function
 
-lsource <- c("cachedf.R", "readDataset.R")
-lapply(lsource, source)
+
 
 ## Dataset cleaning for best function
-clean.best <- function(path = "Data" , filecsv = "outcome-of-care-measures.csv", tf = as.character()){
+clean.best <- function(path = "Data" , filecsv = "outcome-of-care-measures.csv"){
     
-    ch.df <<- cache.df() 
+    if(!exists("ch.df", envir = .GlobalEnv)) ch.df <<- cache.df() 
     cleandf <- ch.df$get.df()
     
     
@@ -78,15 +77,15 @@ clean.best <- function(path = "Data" , filecsv = "outcome-of-care-measures.csv",
             arrange(-dplyr::desc(rate)))
     
     #### from here define partial cleaning for each of the of the functions
-    if(tf == "best"){
+   
         
         df.final <- dplyr::mutate(df.final, condition =  recode(condition, .Mortality.H.Attack = "heart attack",
                                                                 .Mortality.H.Failure = "heart failure",
                                                                 .Mortality.Pneumonia = "pneumonia")) %>%
                             transform(condition = as.factor(condition))
-        ####### 
+         
         
-    }
+    
     detach(dataset.b)
     ch.df$set.df(df.final)
     
