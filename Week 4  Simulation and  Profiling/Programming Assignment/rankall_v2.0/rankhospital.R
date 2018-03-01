@@ -4,13 +4,13 @@ require(rlang)
 lsource <- c("cachedf.R", "readDataset.R", "data.clean.R")
 lapply(lsource, source)
 
-rankhospital <- function(state, outcome, num = "best") {
+rankhospital <- function(state, outcome, num = as.numeric()) {
     ## Read outcome data
     ## Check that state and outcome are valid
     ## Return hospital name in that state with the given rank
     ## 30-day death rate
     
-    df.final <- clean.best("Data", "outcome-of-care-measures.csv")
+    df.final <- clean("Data", "outcome-of-care-measures.csv")
     
     
     cond <- levels(ch.df$get.df()[, 3])
@@ -45,7 +45,9 @@ rankhospital <- function(state, outcome, num = "best") {
                                       & df.final[["condition"]] == outcome, 
                                       !is.na(df.final[["rate"]]))
 
-    df.tt <- cbind(df.t[order(df.t$rate, df.t$.Hospital), ], c(1:length(df.t$rate)))
+    df.tt <- cbind(df.t[order(df.t$rate, df.t$.Hospital), ], rank = c(1:length(df.t$rate)))
+    
+    
     
     head(df.tt, 15)
     

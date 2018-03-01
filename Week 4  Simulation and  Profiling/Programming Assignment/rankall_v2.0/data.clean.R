@@ -8,7 +8,7 @@
 ## will return data frame ready 
 ## to work for itch function
 ## Dataset cleaning for best function
-clean.best <- function(path = "Data" , filecsv = "outcome-of-care-measures.csv"){
+clean <- function(path = "Data" , filecsv = "outcome-of-care-measures.csv"){
     
    if(!exists("ch.df", envir = .GlobalEnv)) ch.df <<- cache.df() 
    
