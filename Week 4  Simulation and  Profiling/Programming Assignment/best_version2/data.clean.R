@@ -7,20 +7,9 @@
 ## time reduction on access
 ## will return data frame ready 
 ## to work for itch function
-<<<<<<< HEAD
-## Dataset cleaning for best function
-
-clean.best <- function(path = "Data" , filecsv = "outcome-of-care-measures.csv"){
-    
-    
-=======
-
-
-
 ## Dataset cleaning for best function
 clean.best <- function(path = "Data" , filecsv = "outcome-of-care-measures.csv"){
-    
->>>>>>> 89b77247d8d7ca71c96338dcd65e8d38733bbb2b
+
     if(!exists("ch.df", envir = .GlobalEnv)) ch.df <<- cache.df() 
     
     cleandf <- ch.df$get.df()
@@ -74,29 +63,17 @@ clean.best <- function(path = "Data" , filecsv = "outcome-of-care-measures.csv")
                                              .Mortality.H.Failure = "heart failure",
                                              .Mortality.Pneumonia = "pneumonia"))%>%
             arrange(-dplyr::desc(rate)))
-    
-<<<<<<< HEAD
-    # from here define partial cleaning for each of the of the functions
-    
-=======
-    #### from here define partial cleaning for each of the of the functions
->>>>>>> 89b77247d8d7ca71c96338dcd65e8d38733bbb2b
    
         
         df.final <- dplyr::mutate(df.final, condition =  recode(condition, .Mortality.H.Attack = "heart attack",
                                                                 .Mortality.H.Failure = "heart failure",
                                                                 .Mortality.Pneumonia = "pneumonia")) %>%
                             transform(condition = as.factor(condition))
-<<<<<<< HEAD
-
-=======
-         
-        
->>>>>>> 89b77247d8d7ca71c96338dcd65e8d38733bbb2b
     
     detach(dataset.b)
     ch.df$set.df(df.final)
     
     return(df.final)
     }
-}
+    
+}   
