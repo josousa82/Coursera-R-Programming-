@@ -6,7 +6,7 @@ lapply(lsource, source)
 
 best <- function(state, outcome){
     
-    df.final <- clean.best("Data", "outcome-of-care-measures.csv")
+    df.final <- clean("Data", "outcome-of-care-measures.csv")
     
     
     cond <- levels(ch.df$get.df()[, 3])

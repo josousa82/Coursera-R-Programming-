@@ -47,10 +47,13 @@ rankhospital <- function(state, outcome, num = as.numeric()) {
 
     df.tt <- cbind(df.t[order(df.t$rate, df.t$.Hospital), ], rank = c(1:length(df.t$rate)))
     
-    
-    print(subset(df.tt$.Hospital, df.tt$rank == num ))
-    print(head(df.tt, 5))
-    print(summary(df.tt))
+    if(num == "worst") {
+        return(subset(df.tt$.Hospital, df.tt$rank == length(df.tt[,4])))
+    }else if(num == "best"){
+        return(best(state, outcome))
+    }else{
+        return(subset(df.tt$.Hospital, df.tt$rank == num))
+    }
     
     
     
