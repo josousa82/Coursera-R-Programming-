@@ -7,14 +7,11 @@
 ## time reduction on access
 ## will return data frame ready 
 ## to work for itch function
-
-
-
 ## Dataset cleaning for best function
-clean.best <- function(path = "Data" , filecsv = "outcome-of-care-measures.csv"){
+clean <- function(path = "Data" , filecsv = "outcome-of-care-measures.csv"){
     
-    if(!exists("ch.df", envir = .GlobalEnv)) ch.df <<- cache.df() 
-    
+   if(!exists("ch.df", envir = .GlobalEnv)) ch.df <<- cache.df() 
+   
     cleandf <- ch.df$get.df()
     
     
@@ -53,16 +50,6 @@ clean.best <- function(path = "Data" , filecsv = "outcome-of-care-measures.csv")
     colnames(df.final) <- c(".Hospital", ".St", ".Mortality.H.Attack", 
                             ".Mortality.H.Failure", ".Mortality.Pneumonia")
     
-    
-    # suppressWarnings(df.final <- df.final %>% 
-    #                      transform(.Mortality.H.Attack = as.numeric(.Mortality.H.Attack),
-    #                                .Mortality.H.Failure = as.numeric(.Mortality.H.Failure), 
-    #                                .Mortality.Pneumonia = as.numeric(.Mortality.Pneumonia), 
-    #                                .St = as.factor(.St)
-    #                                ) %>%
-    #                      gather(condition, rate, .Mortality.H.Attack:.Mortality.Pneumonia)%>%
-    #                      na.omit()) 
-    
     suppressWarnings(
         
         df.final <- df.final%>% 
@@ -76,17 +63,12 @@ clean.best <- function(path = "Data" , filecsv = "outcome-of-care-measures.csv")
                                              .Mortality.H.Failure = "heart failure",
                                              .Mortality.Pneumonia = "pneumonia"))%>%
             arrange(-dplyr::desc(rate)))
-    
-    #### from here define partial cleaning for each of the of the functions
-   
-        
+
         df.final <- dplyr::mutate(df.final, condition =  recode(condition, .Mortality.H.Attack = "heart attack",
                                                                 .Mortality.H.Failure = "heart failure",
                                                                 .Mortality.Pneumonia = "pneumonia")) %>%
                             transform(condition = as.factor(condition))
-         
-        
-    
+  
     detach(dataset.b)
     ch.df$set.df(df.final)
     
