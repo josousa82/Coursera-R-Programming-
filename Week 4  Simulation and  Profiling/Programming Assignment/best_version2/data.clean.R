@@ -14,6 +14,7 @@
 clean.best <- function(path = "Data" , filecsv = "outcome-of-care-measures.csv"){
     
     if(!exists("ch.df", envir = .GlobalEnv)) ch.df <<- cache.df() 
+    
     cleandf <- ch.df$get.df()
     
     
