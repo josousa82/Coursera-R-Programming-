@@ -1,26 +1,21 @@
 require(dplyr)
 require(rlang)
-<<<<<<< HEAD
-
-lsource <- c("cachedf.R", "readDataset.R","data.clean.R" )
-lapply(lsource, source)
-=======
->>>>>>> 89b77247d8d7ca71c96338dcd65e8d38733bbb2b
 
 lsource <- c("cachedf.R", "readDataset.R", "data.clean.R")
 lapply(lsource, source)
-best <- function(state, outcome){
+
+rankhospital <- function(state, outcome, num = as.numeric()) {
+    ## Read outcome data
+    ## Check that state and outcome are valid
+    ## Return hospital name in that state with the given rank
+    ## 30-day death rate
     
-    df.final <- clean.best("Data", "outcome-of-care-measures.csv")
+    df.final <- clean("Data", "outcome-of-care-measures.csv")
     
     
     cond <- levels(ch.df$get.df()[, 3])
     state.check <- levels(ch.df$get.df()[, 2])
-    
-    
-    
-    
-    
+
     tryCatch(
         {
             match.arg(outcome, cond, several.ok = TRUE)
@@ -43,37 +38,20 @@ best <- function(state, outcome){
         finally = function(){
             stop(e)
         }
-
+        
     )
     
     df.t <- df.final%>% dplyr::filter(df.final[[".St"]] == state 
                                       & df.final[["condition"]] == outcome, 
                                       !is.na(df.final[["rate"]]))
-<<<<<<< HEAD
 
-        df.t <- df.t[order(df.t$rate, df.t$.Hospital), ]
-        df.t[1,1]
- 
-=======
-    # ## Finish cleaning
-    # tt <- as.list(table(df.t$rate))
-    # 
-    # fval <- as.character(df.t[1, 4])
-    # 
-    # if(tt[fval] > 1){
-    #     
-    #     tax <- df.t[df.t$rate == fval, ]
-    #     ## tax <- tax %>% arrange(-dplyr::desc(tax[[".Hospital"]]))
-    #     tax <- sort()
-    #     return(sort(tax[,1])[1])
-    #     # return(head(sort(tax[,1])))
-    # }else{
-    #     
-       df.t <- df.t[order(df.t$rate, df.t$.Hospital), ]
-       
-       df.t[1, 1]
-        
-        # head(df.t)
-    # }
->>>>>>> 89b77247d8d7ca71c96338dcd65e8d38733bbb2b
+    df.tt <- cbind(df.t[order(df.t$rate, df.t$.Hospital), ], rank = c(1:length(df.t$rate)))
+    
+    
+    print(subset(df.tt$.Hospital, df.tt$rank == num ))
+    print(head(df.tt, 5))
+    print(summary(df.tt))
+    
+    
+    
 }
