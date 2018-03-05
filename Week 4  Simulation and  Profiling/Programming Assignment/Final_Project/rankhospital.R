@@ -1,10 +1,10 @@
 require(dplyr)
 require(rlang)
 
-lsource <- c("cachedf.R", "readDataset.R", "data.clean.R")
+lsource <- c("best.R", "cachedf.R", "readDataset.R", "data.clean.R")
 lapply(lsource, source)
 
-rankhospital <- function(state, outcome, num = as.numeric()) {
+rankhospital <- function(state, outcome, num) {
     ## Read outcome data
     ## Check that state and outcome are valid
     ## Return hospital name in that state with the given rank
@@ -48,11 +48,11 @@ rankhospital <- function(state, outcome, num = as.numeric()) {
     df.tt <- cbind(df.t[order(df.t$rate, df.t$.Hospital), ], rank = c(1:length(df.t$rate)))
     
     if(num == "worst") {
-        return(subset(df.tt$.Hospital, df.tt$rank == length(df.tt[,4])))
+        subset(df.tt$.Hospital, df.tt$rank == length(df.tt[,4]))
     }else if(num == "best"){
-        return(best(state, outcome))
+        best(state, outcome)
     }else{
-        return(subset(df.tt$.Hospital, df.tt$rank == num))
+      subset(df.tt$.Hospital, df.tt$rank == num)
     }
     
     

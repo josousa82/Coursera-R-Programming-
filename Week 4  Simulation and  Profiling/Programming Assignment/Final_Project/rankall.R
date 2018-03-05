@@ -1,91 +1,65 @@
+
+## Read outcome data
+## Check that state and outcome are valid
+## For each state, find the hospital of the given rank
+## Return a data frame with the hospital names and the
+## (abbreviated) state name
+lsource <- c("best.R", "cachedf.R", "readDataset.R", "data.clean.R")
+lapply(lsource, source)
+
 rankall <- function(outcome, num = "best") {
-    ## Read outcome data
-    ## Check that state and outcome are valid
-    ## For each state, find the hospital of the given rank
-    ## Return a data frame with the hospital names and the
-    ## (abbreviated) state name
+    
+    df.final <- clean("Data", "outcome-of-care-measures.csv")
+    
+    
+    cond <- levels(ch.df$get.df()[, 3])
+    states <- levels(ch.df$get.df()[, 2])
+    
+    
+    tryCatch(
+        {
+            match.arg(outcome, cond, several.ok = TRUE)
+        },
+        error = function(e) {
+            return(message(sprintf("Error in best(\"%s\", \"%s\") : invalid outcome", state, outcome)))
+            stop(e)
+        },
+        finally = function(){
+            stop("STOP")
+        }
+    )
+ 
+    ##print(head(df.t)[, c(1,2)])
+    
+    test.rall <- tribble(~hospital, ~state)
+    
+    rank.hosp <- function(state, outcome, num = "best"){
+        
+        df.t <- df.final%>% dplyr::filter(df.final[[".St"]] == state 
+                                          & df.final[["condition"]] == outcome, 
+                                          !is.na(df.final[["rate"]]))
+        
+        df.tt <- cbind(df.t[order(df.t$rate, df.t$.Hospital), ], rank = c(1:length(df.t$rate)))
+        
+        if(num == "worst") {
+            row.to.add <- subset(df.tt[, c(1, 2)], df.tt$rank == length(df.tt[,4]))
+        }else if(num == "best"){
+            row.to.add <-  subset(df.tt[, c(1, 2)] , df.tt$rank == 1)
+        }else{
+            row.to.add <- subset(df.tt[, c(1, 2)] , df.tt$rank == num)
+        }
+        x <- row.to.add[1, 1]
+        y <- row.to.add[1, 2]
+        
+        test.rall <<- add_row(test.rall, hospital = x, state = y)
+    }
+    
+    mapply(rank.hosp, states, outcome, num) 
+    
+    test.rall
+   
+
 }
 
 
 
-
-# The function should check the validity of its arguments. If an invalid outcome value is passed to rankall,
-# the function should throw an error via the stop function with the exact message “invalid outcome”. The num
-# variable can take values “best”, “worst”, or an integer indicating the ranking (smaller numbers are better).
-# If the number given by num is larger than the number of hospitals in that state, then the function should
-# return NA.
-# Here is some sample output from the function.
-# > source("rankall.R")
-# > head(rankall("heart attack", 20), 10)
-# AK
-# AL
-# AR
-# hospital state
-# <NA>
-#     AK
-# D W MCMILLAN MEMORIAL HOSPITAL
-# AL
-# ARKANSAS METHODIST MEDICAL CENTER
-# AR
-# 4AZ JOHN C LINCOLN DEER VALLEY HOSPITAL
-# CA
-# SHERMAN OAKS HOSPITAL
-# CO
-# SKY RIDGE MEDICAL CENTER
-# CT
-# MIDSTATE MEDICAL CENTER
-# DC
-# <NA>
-#     DE
-# <NA>
-#     FL
-# SOUTH FLORIDA BAPTIST HOSPITAL
-# AZ
-# CA
-# CO
-# CT
-# DC
-# DE
-# FL
-# > tail(rankall("pneumonia", "worst"), 3)
-# hospital state
-# WI MAYO CLINIC HEALTH SYSTEM - NORTHLAND, INC
-# WI
-# WV
-# PLATEAU MEDICAL CENTER
-# WV
-# WY
-# NORTH BIG HORN HOSPITAL DISTRICT
-# WY
-# > tail(rankall("heart failure"), 10)
-# hospital state
-# TN
-# WELLMONT HAWKINS COUNTY MEMORIAL HOSPITAL
-# TN
-# TX
-# FORT DUNCAN MEDICAL CENTER
-# TX
-# UT VA SALT LAKE CITY HEALTHCARE - GEORGE E. WAHLEN VA MEDICAL CENTER
-# UT
-# VA
-# SENTARA POTOMAC HOSPITAL
-# VA
-# VI
-# GOV JUAN F LUIS HOSPITAL & MEDICAL CTR
-# VI
-# VT
-# SPRINGFIELD HOSPITAL
-# VT
-# WA
-# HARBORVIEW MEDICAL CENTER
-# WA
-# WI
-# AURORA ST LUKES MEDICAL CENTER
-# WI
-# WV
-# FAIRMONT GENERAL HOSPITAL
-# WV
-# WY
-# CHEYENNE VA MEDICAL CENTER
-# WY
-# Save your code for this function to a file named rankall.R.
