@@ -1,0 +1,13 @@
+Package: ProAssingnment3
+Title: R Programming Johns Hopkins University Programming Assignment 3
+Version: 1.0.0.0
+Authors@R: person("Jose", "Sousa", email = "j.alves.sousa82@gmail.com", role = c("aut", "cre"))
+Description:  This Package Installs the functions best.R, rankhospital.R, rankall.R. It also try to make 
+              theme work  with efficiency using a technique to cache the data in an environment in a 
+              function created for that propose. Those functions can be called individually.
+              This package can be used as an Example, nothing more, maybe in the future, I will try 
+              to make more generic functions, that may bring some kind of functionality to R.
+Depends: R (>= 3.4.2)
+License: MIT
+Encoding: UTF-8
+LazyData: true
