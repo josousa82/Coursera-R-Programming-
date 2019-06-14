@@ -6,7 +6,7 @@
 ## will cache the data, for 
 ## time reduction on access
 ## will return data frame ready 
-## to work for itch function
+## to work with each function
 ## Dataset cleaning for best function
 clean <- function(path = "Data" , filecsv = "outcome-of-care-measures.csv"){
 
