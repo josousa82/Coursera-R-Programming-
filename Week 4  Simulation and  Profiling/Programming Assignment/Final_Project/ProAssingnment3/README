@@ -3,8 +3,11 @@ Title: R Programming Johns Hopkins University Programming Assignment 3
 Version: 1.0.0.0
 Authors@R: person("Jose", "Sousa", email = "j.alves.sousa82@gmail.com", role = c("aut", "cre"))
 Description:  This Package Installs the functions best.R, rankhospital.R, rankall.R. It also try to make 
-              theme work  with efficiency using a technique to cache the data in an environment in a 
-              function created for that propose. Those functions can be called individually.
+              them work more efficiently, using a technique to cache the data in an environment that keeps runnig in backgroung, 
+              while the functions run in the Global env. The support enviroment function, simulates and object similar to what is used 
+              in oop, to store state and encapsulation (where is possible), simulating getters and setters throught a list of functions 
+              that is returned by the function.
+              Those functions can be called individually.
               This package can be used as an Example, nothing more, maybe in the future, I will try 
               to make more generic functions, that may bring some kind of functionality to R.
 Depends: R (>= 3.4.2)
